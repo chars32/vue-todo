@@ -1,18 +1,16 @@
 <template>
   <v-layout wrap>
     <!-- menu lateral -->
-    <v-container>
-      <v-layout row wrap>
+      <v-layout>
         <v-flex xs12>
           <v-card>
             <v-toolbar color="white">
               <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-              <h3>Todo List</h3>
+              <h3>{{ title }}</h3>
             </v-toolbar>
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
     <v-navigation-drawer
       temporary
       v-model="drawer"
@@ -39,15 +37,24 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        drawer: null,
-        items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
-        ]
-      }
-    }
+import {eventBus} from './../main'
+
+export default {
+  data() {
+    return {
+      title: 'Tasks Listss',
+      drawer: null,
+      items: [
+        { title: "Home", icon: "dashboard" },
+        { title: "About", icon: "question_answer" }
+      ],
+    };
+  },
+  // Escuchamos para cambiar el titulo
+  created: function() {
+    eventBus.$on('cambiarTitulo', (titulo) => {
+      this.title = titulo;
+    })
   }
+};
 </script>
