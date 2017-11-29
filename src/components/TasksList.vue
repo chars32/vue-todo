@@ -36,7 +36,7 @@
     </v-flex>
 
     <div class="boton text-xs-right">
-      <div v-if="statusBtn">
+      <div v-if="selected.length === 0">
         <v-btn @click="btnAction" fab dark color="blue accent-3">
           <v-icon>add</v-icon>
         </v-btn>
@@ -75,15 +75,14 @@ export default {
       } else {
         // Agregamos a la lista selected al presionar el recuadro
         this.selected.push(index);
-        alert('Seguro') 
       }
     },
 
     btnAction() {
-      if (this.statusBtn) {
-        console.log("verda")
+      if (this.selected.length === 0) {
+        console.log("Escribir")
       } else {
-        console.log("falso")
+        console.log("Guardar")
       }
     }
   },
