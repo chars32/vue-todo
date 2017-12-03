@@ -4,7 +4,7 @@
       <v-list three-line class="algo">
         <template v-for="(item, index) in itemsRefresh">
           <v-card :key="item.title" class="separacion">
-            <v-list-tile avatar>
+            <v-list-tile avatar :class="{active: isActive}">
               <v-list-tile-avatar>
                 <v-icon>event</v-icon>
               </v-list-tile-avatar>
@@ -41,9 +41,9 @@
           <v-icon>add</v-icon>
         </v-btn>
       </div>
-      <div v-else>
+      <div v-else>     
         <v-btn @click="btnAction" fab dark color="green darken-3">
-          <v-icon>star</v-icon>
+            <v-icon color="white">star</v-icon>
         </v-btn>
       </div>
     </div>
@@ -61,7 +61,8 @@ export default {
       selected: [],
       items: items,
       title: 'Tasks Lists',
-      statusBtn: true
+      idSelected: [],
+      itemsDeleted: []
     };
   },
 
@@ -80,9 +81,24 @@ export default {
 
     btnAction() {
       if (this.selected.length === 0) {
-        console.log("Escribir")
+        this.$router.push('/tasknew')
       } else {
-        console.log("Guardar")
+        this.selected.map(select => {
+          this.idSelected.push(this.items[select].id)
+        })
+        this.idSelected.map(id => {
+          for (let item of items) {
+            if (item.id === id) {
+              let currentItem = (items.indexOf(item))
+              this.itemsDeleted.push(items.slice(currentItem, 1))
+              items.splice(currentItem, 1)
+            }
+          }
+        })
+        // this.$router.push({name: 'complete', params:{itemsDeleted: this.itemsDeleted}})
+        this.selected = []
+        this.idSelected = []
+        this.itemsDeleted = []
       }
     }
   },

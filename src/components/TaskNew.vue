@@ -1,18 +1,14 @@
 <template>
-  <p>
-    {{ itemsillos }}
-  </p>
+  <h1>Task New</h1>
 </template>
 
 <script>
   import {eventBus} from './../main'
 
   export default {
-    props: ['itemsillos'],
     data() {
       return {
-        title: 'Tasks Completed',
-        // algo: this.$route.params
+        title: 'Task New'
       }
     },
     created: function() {
