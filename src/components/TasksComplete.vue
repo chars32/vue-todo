@@ -1,7 +1,7 @@
 <template>
-  <p>
-    {{ itemsillos }}
-  </p>
+  <div>
+    <h1 class="animated fadeInLeft">Probando</h1>
+  </div>
 </template>
 
 <script>
@@ -12,11 +12,17 @@
     data() {
       return {
         title: 'Tasks Completed',
+        status: false
         // algo: this.$route.params
       }
     },
     created: function() {
       eventBus.$emit('cambiarTitulo', this.title)
+      this.status = true
     }
   }
 </script>
+
+<style>
+</style>
+

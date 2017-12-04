@@ -1,40 +1,44 @@
-const items = [
+const todos = [
   {
     id: 1,
-    title: "Brunch this weekend?",
-    subtitle:
-      "<span class='grey--text text--darken-2'>Ali Connors</span> — I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
+    title: "Meeting with Edith",
+    label: 'Personal',
+    date: '01/06/2017',
+    time: '7:50 am',
+    completed: false
   },
   {
     id: 2,
-    title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-    subtitle:
-      "<span class='grey--text text--darken-2'>to Alex, Scott, Jennifer</span> — Wish I could come, but I'm out of town this weekend."
+    title: "Shopping with Danik",
+    label: 'Shopping',
+    date: '02/06/2017',
+    time: '7:50 pm',
+    completed: false
   },
   {
     id: 3,
-    title: "Oui oui",
-    subtitle:
-      "<span class='grey--text text--darken-2'>Sandra Adams</span> — Do you have Paris recommendations? Have you ever been?"
+    title: "Finish the project on time",
+    label: 'Working',
+    date: '03/06/2017',
+    time: '7:50 am',
+    completed: false
   },
   {
     id: 4,
-    title: "Birthday gift",
-    subtitle:
-      "<span class='grey--text text--darken-2'>Trevor Hansen</span> — Have any ideas about what we should get Heidi for her birthday?"
+    title: "Travel to Cancun",
+    label: 'Travel',
+    date: '04/06/2017',
+    time: '6:30 am',
+    completed: false
   },
   {
     id: 5,
-    title: "Recipe to try",
-    subtitle:
-      "<span class='grey--text text--darken-2'>Britta Holt</span> — We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-  },
-  {
-    id: 6,
-    title: "Something better",
-    subtitle:
-      "<span class='grey--text text--darken-2'>Britta Holt</span> — We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
+    title: "Play COD 4",
+    label: 'Hobby',
+    date: '05/06/2017',
+    time: '10:50 pm',
+    completed: false
   }
 ]
 
-module.exports = items;
+module.exports = todos;

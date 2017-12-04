@@ -2,15 +2,19 @@
   <v-layout row>
     <v-flex xs12>
       <v-list three-line class="algo">
-        <template v-for="(item, index) in itemsRefresh">
-          <v-card :key="item.title" class="separacion">
-            <v-list-tile avatar :class="{active: isActive}">
+        <template v-for="(todo, index) in todos">
+          <v-card v-if="todo.completed === false" :key="todo.title" :id="todo.id" class="separacion animated fadeInLeft">
+            <v-list-tile avatar>
               <v-list-tile-avatar>
                 <v-icon>event</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                <v-list-tile-title v-html="todo.title"></v-list-tile-title>
+                <v-list-tile-sub-title v-html="todo.label"></v-list-tile-sub-title>
+                <div class="fecha">
+                  <v-list-tile-sub-title v-html="todo.date"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="todo.time"></v-list-tile-sub-title>
+                </div>
               </v-list-tile-content>
 
               <v-list-tile
@@ -51,7 +55,7 @@
 </template>
 
 <script>
-import items from './../fakeDb/db'
+import todos from './../fakeDb/db'
 import {eventBus} from './../main'
 
 export default {
@@ -59,10 +63,8 @@ export default {
     return {
       dialog: false,
       selected: [],
-      items: items,
+      todos,
       title: 'Tasks Lists',
-      idSelected: [],
-      itemsDeleted: []
     };
   },
 
@@ -84,33 +86,23 @@ export default {
         this.$router.push('/tasknew')
       } else {
         this.selected.map(select => {
-          this.idSelected.push(this.items[select].id)
+          let id = todos[select].id
+          todos[select].computed = true
+          document.getElementById(id).setAttribute('class', 'animated fadeOutRight')
+          setTimeout(() => {
+            document.getElementById(id).setAttribute('class', 'ocultar')
+          }, 500);
         })
-        this.idSelected.map(id => {
-          for (let item of items) {
-            if (item.id === id) {
-              let currentItem = (items.indexOf(item))
-              this.itemsDeleted.push(items.slice(currentItem, 1))
-              items.splice(currentItem, 1)
-            }
-          }
-        })
-        // this.$router.push({name: 'complete', params:{itemsDeleted: this.itemsDeleted}})
+        console.log(this.todos)
+        // this.$router.push(/tasknew)
         this.selected = []
-        this.idSelected = []
-        this.itemsDeleted = []
       }
-    }
-  },
-  // Refrescamos la bd de los items por si hay cabios
-  computed: {
-    itemsRefresh: function () {
-      return  this.items
     }
   },
   // Emitimos para cambiar el titulo del header
   created: function() {
       eventBus.$emit('cambiarTitulo', this.title)
+      this.todos = todos
     }
 };
 </script>
@@ -125,10 +117,18 @@ export default {
   top: 85%;
   width: 90vw;
 }
+.fecha {
+  display: flex;
+  width: 100%;
+}
 .general {
   display: block;
 }
 .separacion {
   margin-bottom: 15px;
+}
+
+.ocultar {
+  display: none;
 }
 </style>
