@@ -94,7 +94,7 @@ export default {
           }, 500);
         })
         console.log(this.todos)
-        // this.$router.push(/tasknew)
+        // this.$router.push('/taskscomplete')
         this.selected = []
       }
     }

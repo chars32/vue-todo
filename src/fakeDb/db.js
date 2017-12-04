@@ -38,6 +38,14 @@ const todos = [
     date: '05/06/2017',
     time: '10:50 pm',
     completed: false
+  },
+  {
+    id: 5,
+    title: "Travel to California",
+    label: 'Travel',
+    date: '06/06/2017',
+    time: '09:55 pm',
+    completed: true
   }
 ]
 
