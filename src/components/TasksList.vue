@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import todos from './../fakeDb/db'
+import todos from './../fakeDb/db.json'
 import {eventBus} from './../main'
 
 export default {
@@ -63,7 +63,7 @@ export default {
     return {
       dialog: false,
       selected: [],
-      todos,
+      todos: todos,
       title: 'Tasks Lists',
     };
   },
@@ -87,14 +87,12 @@ export default {
       } else {
         this.selected.map(select => {
           let id = todos[select].id
-          todos[select].computed = true
           document.getElementById(id).setAttribute('class', 'animated fadeOutRight')
           setTimeout(() => {
-            document.getElementById(id).setAttribute('class', 'ocultar')
+            todos[select].completed = true
           }, 500);
         })
-        console.log(this.todos)
-        // this.$router.push('/taskscomplete')
+        // this.$router.push({name: 'complete', params: {todos: this.todos}})
         this.selected = []
       }
     }
@@ -102,7 +100,6 @@ export default {
   // Emitimos para cambiar el titulo del header
   created: function() {
       eventBus.$emit('cambiarTitulo', this.title)
-      this.todos = todos
     }
 };
 </script>

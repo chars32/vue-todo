@@ -55,15 +55,15 @@
 </template>
 
 <script>
-import todos from './../fakeDb/db'
 import {eventBus} from './../main'
 
 export default {
+  props: ['todos'],
   data() {
     return {
       dialog: false,
       selected: [],
-      todos: todos,
+      // todos: todos,
       title: 'Tasks Completed',
     };
   },
