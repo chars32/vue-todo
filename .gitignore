@@ -3,6 +3,8 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+src/playground
+src/fakeDb
 
 # Editor directories and files
 .idea
