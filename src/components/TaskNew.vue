@@ -1,16 +1,28 @@
 <template>
-  <v-form v-model="valid">
+  <v-form>
     <v-text-field
       label="Title"
-      v-model="tasktitle"
+      v-model="taskTitle"
+      :error-messages="titleErrors"      
+      @blur="$v.taskTitle.$touch()"
       required
     ></v-text-field>
     <v-text-field
       label="Description"
-      v-model="taskdescription"
+      v-model="taskDescription"
+      :error-messages="descriptionErrors"
+      @blur="$v.taskDescription.$touch()"
       required
     ></v-text-field>
-    
+    <v-select
+      label="Label"
+      v-model="select"
+      :items="items"
+      :error-messages="selectErrors"
+     
+      @blur="$v.select.$touch()"
+      required
+    ></v-select>
     <v-layout row wrap>
       <!-- datepicker -->
       <v-flex xs6 sm5>
@@ -59,7 +71,7 @@
         >
           <v-text-field
             slot="activator"
-            label="Picker in menu"
+            label="Time"
             v-model="time"
             prepend-icon="access_time"
             readonly
@@ -68,90 +80,110 @@
         </v-menu>
       </v-flex>
       <!-- end timepicker -->
-      <!-- labelspicker -->
-       <v-flex xs12 sm5>
-        <v-list>
-          <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>{{ item.action }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-            <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.title" @click="algo(subItem.title)">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>{{ subItem.action }}</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list-group>
-        </v-list>
-      </v-flex>
-      <!-- end labelspicker -->
     </v-layout>
-    
+    <div class="text-xs-right">
+      <v-btn @click="submit" fab dark color="green darken-3">
+        <v-icon>save</v-icon>
+      </v-btn>
+    </div>
+    <!-- <v-btn @click="clear">clear</v-btn> -->
   </v-form>
 </template>
 
 <script>
-import { eventBus } from "./../main";
+  import { validationMixin } from 'vuelidate'
+  import { required } from 'vuelidate/lib/validators'
 
-export default {
-  data() {
-    return {
-      title: "Task New",
-      valid: false,
-      tasktitle: "",
-      taskdescription: "",
-      date: null,
-      dateFormatted: null,
-      menu: false,
-      time: null,
-      menu2: false,
-      modal2: false,
-      items: [
-        {
-          action: 'local_offer',
-          title: 'Label',
-          items: [
-            { title: 'Hobby' },
-            { title: 'Travel'},
-            { title: 'Shopping'}
-          ]
-        }
-      ]
-    };
-  },
-  created: function() {
-    eventBus.$emit("cambiarTitulo", this.title);
-  },
-  methods: {
-    algo (eso) {
-      console.log(eso)
+  import todos from './../fakeDb/db.json'
+  import { eventBus } from "./../main"; 
+
+  export default {
+    mixins: [validationMixin],
+    validations: {
+      taskTitle: { required },
+      taskDescription: { required },
+      select: { required },
+      // checkbox: { required }
     },
-    formatDate (date) {
-      if (!date) {
-        return null
+    data () {
+      return {
+        title: "Task New",
+        dateFormatted: null,
+        menu: false,
+        date: null,
+        time: null,
+        menu2: false,
+        //----
+        taskTitle: '',
+        taskDescription: '',
+        select: null,
+        items: [
+          'Hobby',
+          'Work',
+          'Shopping',
+          'Travel'
+        ],
+        
+        // checkbox: false
+      }
+    },
+    created: function() {
+      eventBus.$emit("cambiarTitulo", this.title);
+    },
+    methods: {
+      submit () {
+        this.$v.$touch()
+        let sendTask = {
+          id: todos.length+1,
+          title: this.taskTitle,
+          description: this.taskDescription,
+          label: this.select,
+          date: this.date,
+          time: this.time,
+          completed: false
+        }
+        if(sendTask.title && sendTask.description && sendTask.date && sendTask.time){
+          console.log('si envia')
+        }else {
+          console.log('no se envia')
+        }
+      },
+      formatDate (date) {
+        if (!date) {
+          return null
       }
 
-      const [year, month, day] = date.split('-')
-      return `${month}/${day}/${year}`
-    },
-    parseDate (date) {
-      if (!date) {
-        return null
+      const [day, month, year] = date.split('-')
+      return `${day}/${month}/${year}`
+      },
+      parseDate (date) {
+        if (!date) {
+          return null
       }
 
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     }
+    },
+    computed: {
+      selectErrors () {
+        const errors = []
+        if (!this.$v.select.$dirty) return errors
+        !this.$v.select.required && errors.push('This field is required')
+        return errors
+      },
+      titleErrors () {
+        const errors = []
+        if (!this.$v.taskTitle.$dirty) return errors
+        !this.$v.taskTitle.required && errors.push('This field is required.')
+        return errors
+      },
+      descriptionErrors () {
+        const errors = []
+        if (!this.$v.taskDescription.$dirty) return errors
+        !this.$v.taskDescription.required && errors.push('This field is required')
+        return errors
+      }
+    }
   }
-};
 </script>
