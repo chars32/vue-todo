@@ -38,7 +38,6 @@
         </template>
       </v-list>
     </v-flex>
-
     <div class="boton text-xs-right">
       <div v-if="selected.length === 0">
         <v-btn @click="btnAction" fab dark color="blue accent-3">
@@ -46,7 +45,7 @@
         </v-btn>
       </div>
       <div v-else>     
-        <v-btn fab dark color="green darken-3">
+        <v-btn @click="btnAction" fab dark color="green darken-3">
             <v-icon color="white">star</v-icon>
         </v-btn>
       </div>
@@ -55,7 +54,8 @@
 </template>
 
 <script>
-import todos from './../fakeDb/db.json'
+import axios from 'axios'
+// import todos from './../fakeDb/db.json'
 import {eventBus} from './../main'
 
 export default {
@@ -63,7 +63,7 @@ export default {
     return {
       dialog: false,
       selected: [],
-      todos: todos,
+      todos: [],
       title: 'Tasks Completed',
     };
   },
@@ -86,21 +86,35 @@ export default {
         this.$router.push('/tasknew')
       } else {
         this.selected.map(select => {
-          let id = todos[select].id
+          let id = this.todos[select].id
           document.getElementById(id).setAttribute('class', 'animated fadeOutRight')
           setTimeout(() => {
-            todos[select].completed = false
+            this.todos[select].completed = false
           }, 500);
+          axios.patch(`http://localhost:3000/data/${id}`, {
+            completed: false
+          })
+          .then(response => {
+            response.data.completed
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
         })
-        console.log(todos)
         this.selected = []
       }
     }
   },
   // Emitimos para cambiar el titulo del header
   created: function() {
-      eventBus.$emit('cambiarTitulo', this.title)
-      this.todos = todos
+    eventBus.$emit('cambiarTitulo', this.title)
+    axios.get(`http://localhost:3000/data`)
+    .then(response => {
+      this.todos = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
   }
 };
 </script>

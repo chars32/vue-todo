@@ -55,7 +55,8 @@
 </template>
 
 <script>
-import todos from './../fakeDb/db.json'
+import axios from 'axios'
+// import todos from './../fakeDb/db.json'
 import {eventBus} from './../main'
 
 export default {
@@ -63,7 +64,7 @@ export default {
     return {
       dialog: false,
       selected: [],
-      todos: todos,
+      todos: [],
       title: 'Tasks Lists',
     };
   },
@@ -86,11 +87,20 @@ export default {
         this.$router.push('/tasknew')
       } else {
         this.selected.map(select => {
-          let id = todos[select].id
+          let id = this.todos[select].id
           document.getElementById(id).setAttribute('class', 'animated fadeOutRight')
           setTimeout(() => {
-            todos[select].completed = true
+            this.todos[select].completed = true
           }, 500);
+          axios.patch(`http://localhost:3000/data/${id}`, {
+            completed: true
+          })
+          .then(response => {
+            response.data.completed
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
         })
         // this.$router.push({name: 'complete', params: {todos: this.todos}})
         this.selected = []
@@ -100,6 +110,14 @@ export default {
   // Emitimos para cambiar el titulo del header
   created: function() {
       eventBus.$emit('cambiarTitulo', this.title)
+      axios.get(`http://localhost:3000/data`)
+      .then(response => {
+        console.log(response.data)
+        this.todos = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
     }
 };
 </script>

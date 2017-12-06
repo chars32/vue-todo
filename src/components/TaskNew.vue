@@ -93,8 +93,9 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
+  import axios from 'axios'
 
-  import todos from './../fakeDb/db.json'
+  // import todos from './../fakeDb/db.json'
   import { eventBus } from "./../main"; 
 
   export default {
@@ -114,6 +115,7 @@
         time: null,
         menu2: false,
         //----
+        completed: false,
         taskTitle: '',
         taskDescription: '',
         select: null,
@@ -133,17 +135,23 @@
     methods: {
       submit () {
         this.$v.$touch()
-        let sendTask = {
-          id: todos.length+1,
-          title: this.taskTitle,
-          description: this.taskDescription,
-          label: this.select,
-          date: this.date,
-          time: this.time,
-          completed: false
-        }
-        if(sendTask.title && sendTask.description && sendTask.date && sendTask.time){
+        if(this.taskTitle && this.taskDescription && this.select && this.date && this.time){
           console.log('si envia')
+          axios.post('http://localhost:3000/data', {
+            id: this.id,
+            title: this.taskTitle,
+            description: this.taskDescription,
+            label: this.select,
+            date: this.date,
+            time: this.time,
+            completed: this.completed
+          })
+          .then((response) => {
+            console.log(response)
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
         }else {
           console.log('no se envia')
         }
