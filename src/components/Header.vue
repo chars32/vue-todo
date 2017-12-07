@@ -22,7 +22,7 @@
       </v-list>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile class="pt-1" v-for="item in items" :key="item.title" @click="">
+        <v-list-tile class="pt-1" v-for="item in items" :key="item.title" @click="linkBtn(item.path)">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -45,8 +45,10 @@ export default {
       title: 'Tasks Listss',
       drawer: null,
       items: [
-        { title: "Home", icon: "dashboard" },
-        { title: "About", icon: "question_answer" }
+        { title: "Home", icon: "dashboard", path: "/" },
+        { title: "Tasks List", icon: "view_list", path: "/taskslist" },
+        { title: "Tasks Completed", icon: "playlist_add_check", path: "/taskscomplete" },
+        { title: "Task New", icon: "playlist_add", path: "/tasknew" }
       ],
     };
   },
@@ -55,6 +57,12 @@ export default {
     eventBus.$on('cambiarTitulo', (titulo) => {
       this.title = titulo;
     })
+  },
+  methods: {
+    linkBtn(item) {
+      console.log(item)
+      this.$router.push(item)
+    }
   }
 };
 </script>
