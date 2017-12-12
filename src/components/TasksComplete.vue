@@ -3,7 +3,7 @@
     <v-flex xs12>
       <v-list three-line class="algo">
         <template v-for="(todo, index) in todos">
-          <v-card v-if="todo.completed === true" :key="todo.title" :id="todo.id" class="separacion animated fadeInLeft">
+          <v-card v-if="todo.completed === true" :key="todo.title" :id="todo._id" class="separacion animated fadeInLeft">
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <v-icon>event</v-icon>
@@ -86,19 +86,31 @@ export default {
         this.$router.push('/tasknew')
       } else {
         this.selected.map(select => {
-          let id = this.todos[select].id
+          let id = this.todos[select]._id
           document.getElementById(id).setAttribute('class', 'animated fadeOutRight')
           setTimeout(() => {
             this.todos[select].completed = false
           }, 500);
-          axios.patch(`http://localhost:3000/data/${id}`, {
+          axios.put(`https://arcane-brushlands-81093.herokuapp.com/todos/${id}`, {
+            title: this.todos[select].title,
+            description: this.todos[select].description,
+            label: this.todos[select].label,
+            date: this.todos[select].date,
+            time: this.todos[select].time,
             completed: false
           })
           .then(response => {
-            response.data.completed
+            response.data.todos.title = title
+            response.data.todos.description = description
+            response.data.todos.label = label,
+            response.data.todos.date = date,
+            response.data.todos.time = time
+            response.data.todos.completed = completed
+            return response
           })
           .catch(e => {
-            this.errors.push(e)
+            // this.errors.push(e)
+            console.log(e)
           })
         })
         this.selected = []
@@ -108,9 +120,9 @@ export default {
   // Emitimos para cambiar el titulo del header
   created: function() {
     eventBus.$emit('cambiarTitulo', this.title)
-    axios.get(`http://localhost:3000/data`)
+    axios.get(`https://arcane-brushlands-81093.herokuapp.com/todos`)
     .then(response => {
-      this.todos = response.data
+      this.todos = response.data.todos
     })
     .catch(e => {
       this.errors.push(e)

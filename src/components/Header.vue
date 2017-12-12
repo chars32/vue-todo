@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     linkBtn(item) {
-      console.log(item)
       this.$router.push(item)
     }
   }

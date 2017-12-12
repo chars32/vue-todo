@@ -92,7 +92,6 @@ export default {
           setTimeout(() => {
             this.todos[select].completed = true
           }, 500);
-
           axios.put(`https://arcane-brushlands-81093.herokuapp.com/todos/${id}`, {
             title: this.todos[select].title,
             description: this.todos[select].description,
@@ -108,7 +107,7 @@ export default {
             response.data.todos.date = date,
             response.data.todos.time = time
             response.data.todos.completed = completed
-            console.log(response) 
+            return response
           })
           .catch(e => {
             // this.errors.push(e)
