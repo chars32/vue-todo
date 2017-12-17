@@ -136,24 +136,21 @@
       submit () {
         this.$v.$touch()
         if(this.taskTitle && this.taskDescription && this.select && this.date && this.time){
-          console.log('si envia')
-          axios.post('http://localhost:3000/data', {
-            id: this.id,
+          axios.post('https://arcane-brushlands-81093.herokuapp.com/todos', {
             title: this.taskTitle,
             description: this.taskDescription,
             label: this.select,
             date: this.date,
             time: this.time,
-            completed: this.completed
           })
           .then((response) => {
-            console.log(response)
+            console.log("task save")
           })
           .catch(e => {
-            this.errors.push(e)
+            console.log(e)
           })
         }else {
-          console.log('no se envia')
+          console.log('task not save')
         }
       },
       formatDate (date) {

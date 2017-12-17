@@ -101,7 +101,7 @@ export default {
             completed: true
           })
           .then(response => {
-            console.log(response.data)
+            console.log("actualizado")
           })
           .catch(e => {
             console.log(e)
