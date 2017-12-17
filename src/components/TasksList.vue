@@ -101,16 +101,9 @@ export default {
             completed: true
           })
           .then(response => {
-            response.data.todos.title = title
-            response.data.todos.description = description
-            response.data.todos.label = label,
-            response.data.todos.date = date,
-            response.data.todos.time = time
-            response.data.todos.completed = completed
-            return response
+            console.log(response.data)
           })
           .catch(e => {
-            // this.errors.push(e)
             console.log(e)
           })
         })
